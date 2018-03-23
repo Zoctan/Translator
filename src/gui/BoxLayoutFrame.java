@@ -1,17 +1,27 @@
 package gui;
 
+import api.AbstractApi;
+import api.BaiDuApi;
+import api.GoogleApi;
+import api.YouDaoApi;
 import bean.youdao.YouDaoBean;
 import com.alibaba.fastjson.JSON;
-import utils.YouDaoUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ItemEvent;
 
 class BoxLayoutFrame extends JFrame {
     private static final int WIDTH = 500;
     private static final int HEIGHT = 400;
-    private final JPanel panelContainer = new JPanel();
+    private JPanel panelContainer;
     private JTextArea beforeTranslateTextArea, afterTranslateTextArea;
+    private final String[] sourceURLs = {"Youdao", "Baidu", "Google"};
+    private AbstractApi defaultApi;
+    // 获取系统剪贴板
+    private final Clipboard clipboard = this.getToolkit().getSystemClipboard();
 
     BoxLayoutFrame(final String title) {
         this.setTitle(title);
@@ -22,17 +32,21 @@ class BoxLayoutFrame extends JFrame {
         this.setLocationRelativeTo(null);
         // 可调整大小
         this.setResizable(true);
+        this.setContentPane();
+        // 设置界面可见
+        this.setVisible(true);
+    }
 
+    private void setContentPane() {
+        panelContainer = new JPanel();
         panelContainer.setLayout(new GridBagLayout());
+
         // 创建并添加组件
         this.addPanel(this.createTopPanel(), 0, 0, 1.0, 1.0, GridBagConstraints.BOTH);
         this.addPanel(this.createMiddlePanel(), 0, 1, 1.0, 0, GridBagConstraints.HORIZONTAL);
         this.addPanel(this.createBottomPanel(), 0, 2, 1.0, 1.0, GridBagConstraints.BOTH);
 
         this.setContentPane(panelContainer);
-
-        // 设置界面可见
-        this.setVisible(true);
     }
 
     private void addPanel(final JPanel panel, final int gridx, final int gridy, final double weightx, final double weighty, final int fill) {
@@ -70,6 +84,33 @@ class BoxLayoutFrame extends JFrame {
         final JPanel middlePanel = new JPanel();
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 
+        defaultApi = new YouDaoApi();
+
+        // 下拉框
+        final JComboBox<String> comboBox;
+        comboBox = new JComboBox<>(sourceURLs);
+        comboBox.addItemListener(itemEvent -> {
+            if (ItemEvent.SELECTED == itemEvent.getStateChange()) {
+                final String selectedItem = itemEvent.getItem().toString();
+                switch (selectedItem) {
+                    case "Baidu":
+                        defaultApi = new BaiDuApi();
+                        break;
+                    case "Google":
+                        defaultApi = new GoogleApi();
+                        break;
+                    default:
+                        defaultApi = new YouDaoApi();
+                        break;
+                }
+                System.out.println("new selected item : " + selectedItem);
+            }
+            if (ItemEvent.DESELECTED == itemEvent.getStateChange()) {
+                final String selectedItem = itemEvent.getItem().toString();
+                System.out.println("deselected item : " + selectedItem);
+            }
+        });
+
         final JButton ocrButton = new JButton("ocr");
         ocrButton.addActionListener(event -> {
             final String a = beforeTranslateTextArea.getText();
@@ -84,7 +125,7 @@ class BoxLayoutFrame extends JFrame {
             }
             query = query.replaceAll("\t|\r|\n", "");
             System.out.print(query + " ");
-            final String response = YouDaoUtils.request(query);
+            final String response = defaultApi.request(query);
             System.out.println(response);
             final YouDaoBean youDaoBean = JSON.parseObject(response, YouDaoBean.class);
 
@@ -95,7 +136,12 @@ class BoxLayoutFrame extends JFrame {
         pasteButton.addActionListener(event -> beforeTranslateTextArea.paste());
 
         final JButton copyButton = new JButton("copy");
-        copyButton.addActionListener(event -> afterTranslateTextArea.copy());
+        copyButton.addActionListener(event -> {
+            final String tempText = afterTranslateTextArea.getText();
+            // 创建能传输指定 String 的 Transferable。
+            final StringSelection editText = new StringSelection(tempText);
+            clipboard.setContents(editText, null);
+        });
 
         final JButton clearButton = new JButton("clear");
         clearButton.addActionListener(event -> {
@@ -105,6 +151,8 @@ class BoxLayoutFrame extends JFrame {
 
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(comboBox);
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(ocrButton);
         buttonPanel.add(Box.createHorizontalGlue());

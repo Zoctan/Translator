@@ -110,33 +110,6 @@ public class YouDaoBean {
         this.speakUrl = speakUrl;
     }
 
-    /*
-    @Override
-    public String toString() {
-        final StringBuffer buffer = new StringBuffer();
-        try {
-            final String phonetic = this.getBasic().getPhonetic();
-
-            buffer.append("翻译：");
-            for (final String s : this.getTranslation()) {
-                buffer.append(s);
-            }
-            buffer.append("\n");
-
-            if (phonetic != null) {
-                buffer.append("音标：").append(phonetic).append("\n");
-            }
-
-            buffer.append("词义：");
-            for (final String s : this.getBasic().getExplains()) {
-                buffer.append(s).append("\n").append(" ");
-            }
-        } catch (final NullPointerException ignored) {
-            buffer.append("翻译：").append("无法找到该单词哦");
-        }
-        return buffer.toString();
-    }
-    */
     @Override
     public String toString() {
         try {
