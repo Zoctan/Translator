@@ -1,11 +1,8 @@
 package gui;
 
 import api.AbstractApi;
-import api.impl.BaiduApi;
+import api.ApiFactory;
 import api.impl.GoogleApi;
-import api.impl.YoudaoApi;
-import bean.youdao.YoudaoBean;
-import com.alibaba.fastjson.JSON;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +16,19 @@ class BoxLayoutFrame extends JFrame {
     private JPanel panelContainer;
     private JTextArea beforeTranslateTextArea, afterTranslateTextArea;
     private final String[] sourceURLs = {"Youdao", "Baidu", "Google"};
+    private ApiFactory apiFactory;
     private AbstractApi defaultApi;
     // 获取系统剪贴板
     private final Clipboard clipboard = this.getToolkit().getSystemClipboard();
 
     BoxLayoutFrame(final String title) {
+        try {
+            apiFactory = new ApiFactory();
+            defaultApi = apiFactory.get(sourceURLs[0]);
+        } catch (final Exception e) {
+            System.exit(1);
+        }
+
         this.setTitle(title);
         // 设置宽度 高度
         this.setSize(WIDTH, HEIGHT);
@@ -84,25 +89,13 @@ class BoxLayoutFrame extends JFrame {
         final JPanel middlePanel = new JPanel();
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 
-        defaultApi = new YoudaoApi();
-
         // 下拉框
         final JComboBox<String> comboBox;
         comboBox = new JComboBox<>(sourceURLs);
         comboBox.addItemListener(itemEvent -> {
             if (ItemEvent.SELECTED == itemEvent.getStateChange()) {
                 final String selectedItem = itemEvent.getItem().toString();
-                switch (selectedItem) {
-                    case "Baidu":
-                        defaultApi = new BaiduApi();
-                        break;
-                    case "Google":
-                        defaultApi = new GoogleApi();
-                        break;
-                    default:
-                        defaultApi = new YoudaoApi();
-                        break;
-                }
+                defaultApi = apiFactory.get(selectedItem);
                 System.out.println("new selected item : " + selectedItem);
             }
             if (ItemEvent.DESELECTED == itemEvent.getStateChange()) {
@@ -123,7 +116,9 @@ class BoxLayoutFrame extends JFrame {
             if (query == null) {
                 return;
             }
-            query = query.replaceAll("\t|\r|\n", "");
+            if (!(defaultApi instanceof GoogleApi)) {
+                query = query.replaceAll("[\t\r\n]", "");
+            }
             System.out.print(query + " ");
             final String response = defaultApi.translate(query);
             afterTranslateTextArea.setText(response);

@@ -2,6 +2,8 @@ package api.impl;
 
 import api.AbstractApi;
 import api.annotation.ApiComponent;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import net.dongliu.requests.Requests;
 import utils.RegexUtils;
 
@@ -11,6 +13,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApiComponent(name = "Google")
 public class GoogleApi extends AbstractApi {
@@ -20,7 +23,9 @@ public class GoogleApi extends AbstractApi {
 
     @Override
     protected String getResult(final String response) {
-        return response;
+        return ((JSONArray) JSON.parseArray(response).get(0)).stream()
+                .map(arr -> (String) ((JSONArray) arr).get(0))
+                .collect(Collectors.joining("", "", ""));
     }
 
     @Override
@@ -32,9 +37,9 @@ public class GoogleApi extends AbstractApi {
     @Override
     protected Map<String, String> buildParams(final String query) {
         String from = "en";
-        String to = "zh";
+        String to = "zh-CN";
         if (RegexUtils.isContainChinese(query)) {
-            from = "zh";
+            from = "zh-CN";
             to = "en";
         }
 

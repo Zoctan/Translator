@@ -1,7 +1,6 @@
 package api;
 
 import api.annotation.ApiComponent;
-import api.exception.DuplicationNameException;
 import api.impl.BaiduApi;
 import api.impl.GoogleApi;
 import api.impl.YoudaoApi;
@@ -26,8 +25,8 @@ public class ApiFactory {
     }
 
     public ApiFactory() throws Exception {
-        this.initSystemTranslator();
-        this.initUserTranslator();
+        this.initSystemApi();
+        this.initUserApi();
     }
 
     public ApiFactory(final String[] workPackages) throws Exception {
@@ -38,46 +37,61 @@ public class ApiFactory {
         this(new String[]{workPackage});
     }
 
-    private void initSystemTranslator() throws Exception {
-        for (final Class<?> translatorClass : ApiClasses) {
-            final ApiComponent component = translatorClass.getAnnotation(ApiComponent.class);
-            this.newApiInstance(component, translatorClass);
-        }
+    private void initSystemApi() throws Exception {
+        ApiClasses
+                .forEach(apiClass -> {
+                    final ApiComponent component = apiClass.getAnnotation(ApiComponent.class);
+                    this.newApiInstance(component, apiClass);
+                });
     }
 
-    private void initUserTranslator() throws Exception {
-        for (final String workPackage : workPackages) {
-            final List<String> workClassesName = this.getClassNameByPackage(workPackage);
-            for (final String workClassName : workClassesName) {
-                final Class<?> workClass = Class.forName(workClassName);
-                final ApiComponent component = workClass.getAnnotation(ApiComponent.class);
-                this.newApiInstance(component, workClass);
-            }
-        }
+    private void initUserApi() throws Exception {
+        workPackages
+                .forEach(workPackage -> {
+                    final List<String> workClassesName = this.getClassNameByPackage(workPackage);
+                    assert workClassesName != null;
+                    workClassesName.
+                            forEach(workClassName -> {
+                                final Class<?> workClass;
+                                try {
+                                    workClass = Class.forName(workClassName);
+                                    final ApiComponent component = workClass.getAnnotation(ApiComponent.class);
+                                    this.newApiInstance(component, workClass);
+                                } catch (final ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                });
+
     }
 
-    private void newApiInstance(final ApiComponent component, final Class<?> cls) throws Exception {
+    private void newApiInstance(final ApiComponent component, final Class<?> cls) {
         if (component != null) {
             final String name = component.name();
-            if (ApiMap.containsKey(name)) {
-                throw new DuplicationNameException("Name duplication exception");
-            } else {
-                ApiMap.put(component.name(), (AbstractApi) cls.newInstance());
+            if (!ApiMap.containsKey(name)) {
+                try {
+                    ApiMap.put(component.name(), (AbstractApi) cls.newInstance());
+                } catch (IllegalAccessException | InstantiationException ignore) {
+                }
             }
         }
     }
 
-    private List<String> getClassNameByPackage(final String packageName) throws Exception {
+    private List<String> getClassNameByPackage(final String packageName) {
         final List<String> classesName = new ArrayList<>();
         final ClassLoader loader = this.getClass().getClassLoader();
         final URL url = loader.getResource(packageName.replace(".", "/"));
 
-        final File packageDir = new File(new URI(url.getPath()).getPath());
-        for (final File classFile : packageDir.listFiles()) {
-            String classNickName = classFile.getName();
-            classNickName = classNickName.substring(0, classNickName.indexOf('.'));
-            classesName.add(packageName + "." + classNickName);
+        try {
+            final File packageDir = new File(new URI(url.getPath()).getPath());
+            for (final File classFile : packageDir.listFiles()) {
+                String classNickName = classFile.getName();
+                classNickName = classNickName.substring(0, classNickName.indexOf('.'));
+                classesName.add(packageName + "." + classNickName);
+            }
+            return classesName;
+        } catch (final Exception e) {
+            return null;
         }
-        return classesName;
     }
 }

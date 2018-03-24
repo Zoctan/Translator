@@ -1,7 +1,7 @@
 package gui;
 
 public class Main {
-    public static void main(String[] args) {
-        BoxLayoutFrame frame = new BoxLayoutFrame("Translator");
+    public static void main(final String[] args) {
+        new BoxLayoutFrame("Translator");
     }
 }
