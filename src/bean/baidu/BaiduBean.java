@@ -1,11 +1,12 @@
 package bean.baidu;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * http://api.fanyi.baidu.com/api/trans/product/apidoc
  */
-public class BaiDuBean {
+public class BaiduBean {
     // 翻译源语言
     private String from;
     // 译文语言
@@ -16,6 +17,17 @@ public class BaiDuBean {
     private String src;
     // 译文
     private String dst;
+
+    @Override
+    public String toString() {
+        try {
+            return this.getTrans_result().stream()
+                    .map(TransResult::getDst)
+                    .collect(Collectors.joining(" ", "翻译：", ""));
+        } catch (final NullPointerException ignored) {
+            return "翻译：无法找到该单词哦";
+        }
+    }
 
     public String getFrom() {
         return from;

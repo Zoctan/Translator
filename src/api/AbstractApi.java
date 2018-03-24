@@ -4,11 +4,14 @@ import java.util.Map;
 
 public abstract class AbstractApi {
 
-    public String request(final String query) {
-        return null;
+    public String translate(final String query) {
+        final String response = this.request(query);
+        return this.getResult(response);
     }
 
-    protected Map<String, String> buildParams(final String query) {
-        return null;
-    }
+    abstract protected String getResult(String response);
+
+    abstract protected String request(String query);
+
+    abstract protected Map<String, String> buildParams(String query);
 }

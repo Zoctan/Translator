@@ -1,10 +1,10 @@
 package gui;
 
 import api.AbstractApi;
-import api.BaiDuApi;
-import api.GoogleApi;
-import api.YouDaoApi;
-import bean.youdao.YouDaoBean;
+import api.impl.BaiduApi;
+import api.impl.GoogleApi;
+import api.impl.YoudaoApi;
+import bean.youdao.YoudaoBean;
 import com.alibaba.fastjson.JSON;
 
 import javax.swing.*;
@@ -84,7 +84,7 @@ class BoxLayoutFrame extends JFrame {
         final JPanel middlePanel = new JPanel();
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 
-        defaultApi = new YouDaoApi();
+        defaultApi = new YoudaoApi();
 
         // 下拉框
         final JComboBox<String> comboBox;
@@ -94,13 +94,13 @@ class BoxLayoutFrame extends JFrame {
                 final String selectedItem = itemEvent.getItem().toString();
                 switch (selectedItem) {
                     case "Baidu":
-                        defaultApi = new BaiDuApi();
+                        defaultApi = new BaiduApi();
                         break;
                     case "Google":
                         defaultApi = new GoogleApi();
                         break;
                     default:
-                        defaultApi = new YouDaoApi();
+                        defaultApi = new YoudaoApi();
                         break;
                 }
                 System.out.println("new selected item : " + selectedItem);
@@ -125,11 +125,8 @@ class BoxLayoutFrame extends JFrame {
             }
             query = query.replaceAll("\t|\r|\n", "");
             System.out.print(query + " ");
-            final String response = defaultApi.request(query);
-            System.out.println(response);
-            final YouDaoBean youDaoBean = JSON.parseObject(response, YouDaoBean.class);
-
-            afterTranslateTextArea.setText(youDaoBean.toString());
+            final String response = defaultApi.translate(query);
+            afterTranslateTextArea.setText(response);
         });
 
         final JButton pasteButton = new JButton("paste");

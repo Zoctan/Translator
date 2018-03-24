@@ -1,5 +1,9 @@
-package api;
+package api.impl;
 
+import api.AbstractApi;
+import api.annotation.ApiComponent;
+import bean.youdao.YoudaoBean;
+import com.alibaba.fastjson.JSON;
 import net.dongliu.requests.Requests;
 import utils.MD5Utils;
 
@@ -9,13 +13,20 @@ import java.util.Map;
 /**
  * http://ai.youdao.com/docs/doc-trans-api.s#p02
  */
-public class YouDaoApi extends AbstractApi {
+@ApiComponent(name = "Youdao")
+public class YoudaoApi extends AbstractApi {
     private static final String API_URL = "http://openapi.youdao.com/api";
     private static final String APP_KEY = "5c9ff6cd28a58498";
     private static final String APP_SEC = "0WOi4190sDWm0bfbGXSdBCMmQ6z2kVZt";
 
     @Override
-    public String request(final String query) {
+    protected String getResult(final String response) {
+        final YoudaoBean youdao = JSON.parseObject(response, YoudaoBean.class);
+        return youdao.toString();
+    }
+
+    @Override
+    protected String request(final String query) {
         final Map<String, String> params = this.buildParams(query);
         return Requests.post(API_URL).forms(params).send().readToText();
     }

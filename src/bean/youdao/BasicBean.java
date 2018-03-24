@@ -1,6 +1,5 @@
 package bean.youdao;
 
-
 import java.util.List;
 
 public class BasicBean {

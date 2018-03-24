@@ -10,5 +10,6 @@
     <orderEntry type="library" name="net.sourceforge.tess4j:tess4j:3.4.4" level="project" />
     <orderEntry type="library" name="net.dongliu:requests:4.17.0" level="project" />
     <orderEntry type="library" name="com.alibaba:fastjson:1.2.47" level="project" />
+    <orderEntry type="library" name="junit:junit:4.12" level="project" />
   </component>
 </module>
