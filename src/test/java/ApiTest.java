@@ -1,6 +1,5 @@
-package test;
-
 import com.zoctan.api.ApiFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 

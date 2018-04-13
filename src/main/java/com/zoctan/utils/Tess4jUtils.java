@@ -1,11 +1,13 @@
 package com.zoctan.utils;
 
+/*
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.util.LoadLibs;
 
 import java.io.File;
+*/
 
 public class Tess4jUtils {
     /**
@@ -14,6 +16,7 @@ public class Tess4jUtils {
      * @param path 图片路径
      * @return 图片中文字
      */
+    /*
     public static String readChar(final String path) {
         final ITesseract instance = new Tesseract();
         final File imageFile = new File(path);
@@ -28,6 +31,7 @@ public class Tess4jUtils {
      * @param language 语言字库
      * @return 图片中文字
      */
+    /*
     public static String readChar(final String path, final String dataPath, final String language) {
         final File imageFile = new File(path);
         final ITesseract instance = new Tesseract();
@@ -43,6 +47,7 @@ public class Tess4jUtils {
      * @param imageFile 图片文件
      * @return 图片中文字
      */
+    /*
     private static String getOCRText(final ITesseract instance, final File imageFile) {
         String result = null;
         // 使用classpath目录下的训练库
@@ -62,4 +67,5 @@ public class Tess4jUtils {
         ch = "src/com.zoctan.resources/image/demo2.png";
         System.out.println(readChar(ch));
     }
+    */
 }

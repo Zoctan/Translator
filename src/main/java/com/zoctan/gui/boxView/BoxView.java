@@ -98,17 +98,17 @@ public class BoxView extends JFrame {
             afterTranslateTextArea.setText(response);
         });
 
-        final JButton pasteButton = new JButton("paste");
+        final JButton pasteButton = new JButton("↑paste");
         pasteButton.addActionListener(event -> beforeTranslateTextArea.paste());
 
-        final JButton copyButton = new JButton("copy");
+        final JButton copyButton = new JButton("↓copy");
         copyButton.addActionListener(event -> {
             final String tempText = afterTranslateTextArea.getText();
             final StringSelection editText = new StringSelection(tempText);
             clipboard.setContents(editText, null);
         });
 
-        final JButton clearButton = new JButton("clear");
+        final JButton clearButton = new JButton("↑↓clear");
         clearButton.addActionListener(event -> {
             beforeTranslateTextArea.setText(null);
             afterTranslateTextArea.setText(null);
