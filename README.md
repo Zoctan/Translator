@@ -4,11 +4,11 @@ Java 实现的翻译器，支持 OCR 屏幕取词（暂未实现）
 
 ![1](https://github.com/Zoctan/Translator/blob/master/README/1.png)
 
-![1](https://github.com/Zoctan/Translator/blob/master/README/2.png)
+![2](https://github.com/Zoctan/Translator/blob/master/README/2.png)
 
-![1](https://github.com/Zoctan/Translator/blob/master/README/3.png)
+![3](https://github.com/Zoctan/Translator/blob/master/README/3.png)
 
-![1](https://github.com/Zoctan/Translator/blob/master/README/4.png)
+![4](https://github.com/Zoctan/Translator/blob/master/README/4.png)
 
 ## 说明
 
@@ -30,9 +30,15 @@ OCR 取词暂时不打算填坑。
 
 目前只有谷歌的接口支持段落翻译，其他的只能单词翻译，而且有道翻译需要申请 key。
 
+**将工程转换为 maven 工程**
+
+在 pom.xml 文件上右键，选择 "Add as Maven Project"：
+
+![maven](https://github.com/Zoctan/Translator/blob/master/README/maven.png)
+
 **其他**
 
-由于 jar 打包后大概有 40 多M，所以暂时不提供 jar 文件，需自行打包。
+由于 jar 打包后有点大，所以暂时不提供 jar 文件，需自行打包。
 
 ## 更新日志
 
