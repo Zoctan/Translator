@@ -1,4 +1,4 @@
-import com.zoctan.api.ApiFactory;
+import com.zoctan.translator.api.ApiFactory;
 
 import org.junit.Before;
 import org.junit.Test;
