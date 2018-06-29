@@ -3,7 +3,7 @@ package com.zoctan.api.impl;
 import com.alibaba.fastjson.JSON;
 import com.zoctan.api.AbstractApi;
 import com.zoctan.api.annotation.ApiComponent;
-import com.zoctan.bean.youdao.YoudaoBean;
+import com.zoctan.bean.YoudaoBean;
 import com.zoctan.utils.MD5Utils;
 import net.dongliu.requests.Requests;
 
@@ -11,7 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 有道API
  * http://ai.youdao.com/docs/doc-trans-api.s#p02
+ *
+ * @author Zoctan
+ * @date 2018/06/29
  */
 @ApiComponent(name = "Youdao")
 public class YoudaoApi extends AbstractApi {
@@ -40,7 +44,7 @@ public class YoudaoApi extends AbstractApi {
         final String salt = String.valueOf(System.currentTimeMillis());
         final String sign = MD5Utils.md5(APP_KEY + query + salt + APP_SEC);
 
-        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>(6);
         params.put("q", query);
         params.put("from", from);
         params.put("to", to);

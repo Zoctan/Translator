@@ -10,6 +10,12 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * API工厂
+ *
+ * @author Zoctan
+ * @date 2018/06/29
+ */
 public class ApiFactory {
     private final Map<String, AbstractApi> ApiMap = new HashMap<>();
     private final List<String> workPackages = new ArrayList<>();
@@ -77,11 +83,12 @@ public class ApiFactory {
     }
 
     private List<String> getClassNameByPackage(final String packageName)
-            throws URISyntaxException, NullPointerException {
+            throws URISyntaxException {
         final ClassLoader loader = this.getClass().getClassLoader();
         final URL url = loader.getResource(packageName.replace(".", "/"));
-        final File packageDir = new File(new URI(url.getPath()).getPath());
-        return Arrays.stream(packageDir.listFiles())
+
+        final File packageDir = new File(new URI(Objects.requireNonNull(url).getPath()).getPath());
+        return Arrays.stream(Objects.requireNonNull(packageDir.listFiles()))
                 .map(File::getName)
                 .map(name -> name.substring(0, name.indexOf('.')))
                 .collect(Collectors.toList());

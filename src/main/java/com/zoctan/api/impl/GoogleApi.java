@@ -15,6 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 谷歌API
+ *
+ * @author Zoctan
+ * @date 2018/06/29
+ */
 @ApiComponent(name = "Google")
 public class GoogleApi extends AbstractApi {
     private static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");

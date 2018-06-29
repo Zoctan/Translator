@@ -3,13 +3,19 @@ package com.zoctan.api.impl;
 import com.alibaba.fastjson.JSON;
 import com.zoctan.api.AbstractApi;
 import com.zoctan.api.annotation.ApiComponent;
-import com.zoctan.bean.omi.OmiBean;
+import com.zoctan.bean.OmiBean;
 import com.zoctan.utils.RegexUtils;
 import net.dongliu.requests.Requests;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 欧米API
+ *
+ * @author Zoctan
+ * @date 2018/06/29
+ */
 @ApiComponent(name = "Omi")
 public class OmiApi extends AbstractApi {
     private static final String API_URL = "http://www.alifanyi1688.com/transSents.do";
@@ -35,7 +41,7 @@ public class OmiApi extends AbstractApi {
             to = "e";
         }
 
-        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>(3);
         params.put("languageType", from + "2" + to);
         params.put("userDbName", "");
         params.put("sentsToTrans", query);

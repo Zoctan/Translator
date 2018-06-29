@@ -5,6 +5,12 @@ import com.zoctan.api.ApiFactory;
 
 import javax.swing.*;
 
+/**
+ * 抽象控制器
+ *
+ * @author Zoctan
+ * @date 2018/06/29
+ */
 public abstract class AbstractController {
     private JFrame frame;
     private final ApiFactory apiFactory;

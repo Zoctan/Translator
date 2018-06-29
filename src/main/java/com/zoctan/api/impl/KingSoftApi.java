@@ -3,13 +3,19 @@ package com.zoctan.api.impl;
 import com.alibaba.fastjson.JSON;
 import com.zoctan.api.AbstractApi;
 import com.zoctan.api.annotation.ApiComponent;
-import com.zoctan.bean.kingsoft.KingSoftBean;
+import com.zoctan.bean.KingSoftBean;
 import com.zoctan.utils.RegexUtils;
 import net.dongliu.requests.Requests;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 金山API
+ *
+ * @author Zoctan
+ * @date 2018/06/29
+ */
 @ApiComponent(name = "KingSoft")
 public class KingSoftApi extends AbstractApi {
     private static final String API_URL = "http://fy.iciba.com/ajax.php?a=fy";
@@ -35,7 +41,7 @@ public class KingSoftApi extends AbstractApi {
             to = "en";
         }
 
-        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>(3);
         params.put("f", from);
         params.put("t", to);
         params.put("w", query);

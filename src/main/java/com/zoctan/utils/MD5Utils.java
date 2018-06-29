@@ -5,11 +5,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * MD5相关
+ * MD5相关工具
+ *
+ * @author Zoctan
+ * @date 2018/06/29
  */
 public class MD5Utils {
-    // 首先初始化一个字符数组，用来存放每个16进制字符
-    private static final char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    /**
+     * 16进制字符
+     */
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * 获得一个字符串的MD5值
@@ -18,8 +23,9 @@ public class MD5Utils {
      * @return 输入字符串的MD5值
      */
     public static String md5(final String input) {
-        if (input == null)
+        if (input == null) {
             return null;
+        }
 
         try {
             // 拿到一个MD5转换器（如果想要SHA1参数换成”SHA1”）
@@ -92,8 +98,8 @@ public class MD5Utils {
         // 遍历字节数组，通过位运算（位运算效率高），转换成字符放到字符数组中去
         int index = 0;
         for (final byte b : byteArray) {
-            resultCharArray[index++] = hexDigits[b >>> 4 & 0xf];
-            resultCharArray[index++] = hexDigits[b & 0xf];
+            resultCharArray[index++] = HEX_DIGITS[b >>> 4 & 0xf];
+            resultCharArray[index++] = HEX_DIGITS[b & 0xf];
         }
         // 字符数组组合成字符串返回
         return new String(resultCharArray);
