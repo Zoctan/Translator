@@ -164,6 +164,7 @@ public class BoxView extends JFrame {
         ocrCheckbox.addItemListener(event -> {
             // fixme
             // 后台线程获取鼠标坐标
+            // 开启和恢复存在问题
             if (ocrCheckbox.getState()) {
                 thread.start();
             } else {
