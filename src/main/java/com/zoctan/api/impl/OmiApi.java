@@ -23,13 +23,12 @@ public class OmiApi extends AbstractApi {
     @Override
     protected String request(final String query) {
         final Map<String, String> params = this.buildParams(query);
-        return Requests.post(API_URL).forms(params).send().readToText();
+        return Requests.post(API_URL).body(params).send().readToText();
     }
 
     @Override
     protected String getResult(final String response) {
-        final OmiBean omiBean = JSON.parseObject(response, OmiBean.class);
-        return omiBean.toString();
+        return JSON.parseObject(response, OmiBean.class).toString();
     }
 
     @Override

@@ -20,11 +20,11 @@ import java.util.Objects;
 public class Tess4jUtils {
 
     public static void main(final String[] args) throws NullPointerException {
-        Tess4jUtils tess4jUtils = new Tess4jUtils();
+        final Tess4jUtils tess4jUtils = new Tess4jUtils();
         // 遍历/image/目录下的图片并识别
-        File imageDir = new File(Tess4jUtils.class.getResource("/image/").getPath());
-        File[] images = imageDir.listFiles();
-        for (File image : Objects.requireNonNull(images)) {
+        final File imageDir = new File(Tess4jUtils.class.getResource("/image/").getPath());
+        final File[] images = imageDir.listFiles();
+        for (final File image : Objects.requireNonNull(images)) {
             System.out.println(tess4jUtils.readChar(image.getAbsolutePath()));
         }
     }
@@ -38,7 +38,7 @@ public class Tess4jUtils {
     public String readChar(final String path) {
         final ITesseract instance = new Tesseract();
         final File imageFile = new File(path);
-        return getOCRText(instance, imageFile);
+        return this.getOCRText(instance, imageFile);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Tess4jUtils {
         final ITesseract instance = new Tesseract();
         instance.setDatapath(dataPath);
         instance.setLanguage(language);
-        return getOCRText(instance, imageFile);
+        return this.getOCRText(instance, imageFile);
     }
 
     /**

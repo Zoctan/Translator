@@ -20,19 +20,24 @@ import java.util.Map;
 @ApiComponent(name = "Youdao")
 public class YoudaoApi extends AbstractApi {
     private static final String API_URL = "http://openapi.youdao.com/api";
+    /**
+     * 应用key
+     */
     private static final String APP_KEY = "5c9ff6cd28a58498";
+    /**
+     * 应用秘钥
+     */
     private static final String APP_SEC = "0WOi4190sDWm0bfbGXSdBCMmQ6z2kVZt";
 
     @Override
     protected String request(final String query) {
         final Map<String, String> params = this.buildParams(query);
-        return Requests.post(API_URL).forms(params).send().readToText();
+        return Requests.post(API_URL).body(params).send().readToText();
     }
 
     @Override
     protected String getResult(final String response) {
-        final YoudaoBean youdao = JSON.parseObject(response, YoudaoBean.class);
-        return youdao.toString();
+        return JSON.parseObject(response, YoudaoBean.class).toString();
     }
 
     @Override

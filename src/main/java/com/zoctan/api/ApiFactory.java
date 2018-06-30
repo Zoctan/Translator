@@ -1,7 +1,10 @@
 package com.zoctan.api;
 
 import com.zoctan.api.annotation.ApiComponent;
-import com.zoctan.api.impl.*;
+import com.zoctan.api.impl.GoogleApi;
+import com.zoctan.api.impl.KingSoftApi;
+import com.zoctan.api.impl.OmiApi;
+import com.zoctan.api.impl.YoudaoApi;
 
 import java.io.File;
 import java.net.URI;
@@ -54,7 +57,7 @@ public class ApiFactory {
 
     private void initSystemApi()
             throws InstantiationException, IllegalAccessException {
-        for (final Class<? extends AbstractApi> apiClass : ApiClasses) {
+        for (final Class<? extends AbstractApi> apiClass : this.ApiClasses) {
             final ApiComponent component = apiClass.getAnnotation(ApiComponent.class);
             this.newApiInstance(component, apiClass);
         }
@@ -62,7 +65,7 @@ public class ApiFactory {
 
     private void initUserApi()
             throws URISyntaxException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        for (final String workPackage : workPackages) {
+        for (final String workPackage : this.workPackages) {
             final List<String> workClassesName = this.getClassNameByPackage(workPackage);
             for (final String workClassName : workClassesName) {
                 final Class<?> workClass = Class.forName(workClassName);
@@ -76,8 +79,8 @@ public class ApiFactory {
             throws InstantiationException, IllegalAccessException {
         if (component != null) {
             final String name = component.name();
-            if (!ApiMap.containsKey(name)) {
-                ApiMap.put(component.name(), (AbstractApi) cls.newInstance());
+            if (!this.ApiMap.containsKey(name)) {
+                this.ApiMap.put(component.name(), (AbstractApi) cls.newInstance());
             }
         }
     }

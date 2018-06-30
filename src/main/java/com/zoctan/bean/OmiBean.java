@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * 欧米翻译响应实体
+ *
  * @author Zoctan
  * @date 2018/06/29
  */
@@ -24,7 +25,7 @@ public class OmiBean {
     }
 
     public List<List<String>> getWordResults() {
-        return wordResults;
+        return this.wordResults;
     }
 
     public void setWordResults(final List<List<String>> wordResults) {
@@ -32,7 +33,7 @@ public class OmiBean {
     }
 
     public List<List<String>> getSentExample() {
-        return sentExample;
+        return this.sentExample;
     }
 
     public void setSentExample(final List<List<String>> sentExample) {

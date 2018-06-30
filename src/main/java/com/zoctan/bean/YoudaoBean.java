@@ -89,7 +89,7 @@ public class YoudaoBean {
         private List<String> explains;
 
         public String getPhonetic() {
-            return phonetic;
+            return this.phonetic;
         }
 
         public void setPhonetic(final String phonetic) {
@@ -97,7 +97,7 @@ public class YoudaoBean {
         }
 
         public List<String> getExplains() {
-            return explains;
+            return this.explains;
         }
 
         public void setExplains(final List<String> explains) {
@@ -105,41 +105,41 @@ public class YoudaoBean {
         }
 
         public String getUsPhonetic() {
-            return usPhonetic;
+            return this.usPhonetic;
         }
 
-        public void setUsPhonetic(String usPhonetic) {
+        public void setUsPhonetic(final String usPhonetic) {
             this.usPhonetic = usPhonetic;
         }
 
         public String getUkPhonetic() {
-            return ukPhonetic;
+            return this.ukPhonetic;
         }
 
-        public void setUkPhonetic(String ukPhonetic) {
+        public void setUkPhonetic(final String ukPhonetic) {
             this.ukPhonetic = ukPhonetic;
         }
 
         public String getUkSpeech() {
-            return ukSpeech;
+            return this.ukSpeech;
         }
 
-        public void setUkSpeech(String ukSpeech) {
+        public void setUkSpeech(final String ukSpeech) {
             this.ukSpeech = ukSpeech;
         }
 
         public String getUsSpeech() {
-            return usSpeech;
+            return this.usSpeech;
         }
 
-        public void setUsSpeech(String usSpeech) {
+        public void setUsSpeech(final String usSpeech) {
             this.usSpeech = usSpeech;
         }
     }
 
 
     public Integer getErrorCode() {
-        return errorCode;
+        return this.errorCode;
     }
 
     public void setErrorCode(final Integer errorCode) {
@@ -147,7 +147,7 @@ public class YoudaoBean {
     }
 
     public String getQuery() {
-        return query;
+        return this.query;
     }
 
     public void setQuery(final String query) {
@@ -155,7 +155,7 @@ public class YoudaoBean {
     }
 
     public List<String> getTranslation() {
-        return translation;
+        return this.translation;
     }
 
     public void setTranslation(final List<String> translation) {
@@ -163,7 +163,7 @@ public class YoudaoBean {
     }
 
     public BasicBean getBasic() {
-        return basic;
+        return this.basic;
     }
 
     public void setBasic(final BasicBean basic) {
@@ -171,7 +171,7 @@ public class YoudaoBean {
     }
 
     public String gettSpeakUrl() {
-        return tSpeakUrl;
+        return this.tSpeakUrl;
     }
 
     public void settSpeakUrl(final String tSpeakUrl) {
@@ -179,7 +179,7 @@ public class YoudaoBean {
     }
 
     public String getSpeakUrl() {
-        return speakUrl;
+        return this.speakUrl;
     }
 
     public void setSpeakUrl(final String speakUrl) {

@@ -12,42 +12,55 @@ import javax.swing.*;
  * @date 2018/06/29
  */
 public abstract class AbstractController {
+    /**
+     * 布局
+     */
     private JFrame frame;
+    /**
+     * API工厂
+     */
     private final ApiFactory apiFactory;
+    /**
+     * API名称
+     */
     private String[] apis;
-    private AbstractApi defaultApi;
+    /**
+     * 当前使用的API
+     */
+    private AbstractApi currentApi;
 
     public AbstractController(final JFrame f) {
         this.setFrame(f);
-        apiFactory = new ApiFactory();
+        this.apiFactory = new ApiFactory();
         this.setApis();
-        defaultApi = apiFactory.get(apis[0]);
+        // 默认为第一个API
+        this.currentApi = this.apiFactory.get(this.apis[0]);
     }
 
     abstract public String translate(String query);
 
     public JFrame getFrame() {
-        return frame;
+        return this.frame;
     }
 
     private void setFrame(final JFrame f) {
-        frame = f;
+        this.frame = f;
     }
 
     private void setApis() {
-        apis = new String[apiFactory.getApiMap().size()];
-        apiFactory.getApiMap().keySet().toArray(apis);
+        this.apis = new String[this.apiFactory.getApiMap().size()];
+        this.apiFactory.getApiMap().keySet().toArray(this.apis);
     }
 
     public String[] getApis() {
-        return apis;
+        return this.apis;
     }
 
-    protected AbstractApi getDefaultApi() {
-        return defaultApi;
+    protected AbstractApi getCurrentApi() {
+        return this.currentApi;
     }
 
-    public void setDefaultApi(final String api) {
-        this.defaultApi = apiFactory.get(api);
+    public void setCurrentApi(final String api) {
+        this.currentApi = this.apiFactory.get(api);
     }
 }

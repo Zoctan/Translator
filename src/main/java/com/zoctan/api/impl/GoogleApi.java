@@ -23,13 +23,17 @@ import java.util.stream.Collectors;
  */
 @ApiComponent(name = "Google")
 public class GoogleApi extends AbstractApi {
-    private static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
     private static final String API_URL = "http://translate.google.cn/translate_a/single";
+
+    /**
+     * JS脚本引擎
+     */
+    private static final ScriptEngine ENGINE = new ScriptEngineManager().getEngineByName("JavaScript");
 
     @Override
     protected String request(final String query) {
         final Map<String, String> params = this.buildParams(query);
-        return Requests.post(API_URL).forms(params).send().readToText();
+        return Requests.post(API_URL).body(params).send().readToText();
     }
 
     @Override
@@ -52,7 +56,9 @@ public class GoogleApi extends AbstractApi {
 
         final Map<String, String> params = new HashMap<>();
         params.put("client", "t");
+        // 待翻译语言
         params.put("sl", from);
+        // 翻译结果语言
         params.put("tl", to);
         params.put("hl", "zh-CN");
         params.put("dt", "at");
@@ -65,7 +71,9 @@ public class GoogleApi extends AbstractApi {
         params.put("dt", "rm");
         params.put("dt", "ss");
         params.put("dt", "t");
+        // 输入文字编码UTF-8
         params.put("ie", "UTF-8");
+        // 输出文字编码UTF-8
         params.put("oe", "UTF-8");
         params.put("source", "btn");
         params.put("srcrom", "1");
@@ -94,10 +102,10 @@ public class GoogleApi extends AbstractApi {
                 + "return a.toString() + '.' + (a ^ h)\n"
                 + "}";
         try {
-            engine.eval(script);
-            final Invocable inv = (Invocable) engine;
+            ENGINE.eval(script);
+            final Invocable inv = (Invocable) ENGINE;
             return (String) inv.invokeFunction("tk", val);
-        } catch (ScriptException | NoSuchMethodException e) {
+        } catch (final ScriptException | NoSuchMethodException e) {
             return null;
         }
     }

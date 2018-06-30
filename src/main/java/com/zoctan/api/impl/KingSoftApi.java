@@ -22,14 +22,13 @@ public class KingSoftApi extends AbstractApi {
 
     @Override
     protected String getResult(final String response) {
-        final KingSoftBean kingSoftBean = JSON.parseObject(response, KingSoftBean.class);
-        return kingSoftBean.toString();
+        return JSON.parseObject(response, KingSoftBean.class).toString();
     }
 
     @Override
     protected String request(final String query) {
         final Map<String, String> params = this.buildParams(query);
-        return Requests.post(API_URL).forms(params).send().readToText();
+        return Requests.post(API_URL).body(params).send().readToText();
     }
 
     @Override

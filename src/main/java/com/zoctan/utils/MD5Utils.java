@@ -1,6 +1,6 @@
 package com.zoctan.utils;
 
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -38,58 +38,9 @@ public class MD5Utils {
             final byte[] resultByteArray = messageDigest.digest();
             // 字符数组转换成字符串返回
             return byteArrayToHex(resultByteArray);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (final NoSuchAlgorithmException | UnsupportedEncodingException e) {
             return null;
         }
-    }
-
-    /**
-     * 获取文件的MD5值
-     *
-     * @param file 文件
-     * @return 输入文件的MD5值
-     */
-    public static String md5(final File file) {
-        try {
-            if (!file.isFile()) {
-                System.err.println("文件" + file.getAbsolutePath() + "不存在或者不是文件");
-                return null;
-            }
-
-            final FileInputStream in = new FileInputStream(file);
-            final String result = md5(in);
-            in.close();
-
-            return result;
-        } catch (final IOException e) {
-            return null;
-        }
-    }
-
-    /**
-     * 获得一个字符串的MD5值
-     *
-     * @param in 输入
-     * @return 输入字符串的MD5值
-     */
-    public static String md5(final InputStream in) {
-        try {
-            final MessageDigest messagedigest = MessageDigest.getInstance("MD5");
-
-            final byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                messagedigest.update(buffer, 0, read);
-            }
-
-            in.close();
-
-            return byteArrayToHex(messagedigest.digest());
-        } catch (final NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     private static String byteArrayToHex(final byte[] byteArray) {
@@ -103,6 +54,5 @@ public class MD5Utils {
         }
         // 字符数组组合成字符串返回
         return new String(resultCharArray);
-
     }
 }

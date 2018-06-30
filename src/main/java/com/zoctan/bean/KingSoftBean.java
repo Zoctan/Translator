@@ -12,7 +12,13 @@ import java.util.stream.Collectors;
  * @date 2018/06/29
  */
 public class KingSoftBean {
+    /**
+     * 状态
+     */
     private int status;
+    /**
+     * 内容
+     */
     private ContentBean content;
 
     @Override
@@ -55,56 +61,56 @@ public class KingSoftBean {
         private List<String> wordMean;
 
         public String getPhEn() {
-            return phEn;
+            return this.phEn;
         }
 
-        public void setPhEn(String phEn) {
+        public void setPhEn(final String phEn) {
             this.phEn = phEn;
         }
 
         public String getPhAm() {
-            return phAm;
+            return this.phAm;
         }
 
-        public void setPhAm(String phAm) {
+        public void setPhAm(final String phAm) {
             this.phAm = phAm;
         }
 
         public String getPhEnMp3() {
-            return phEnMp3;
+            return this.phEnMp3;
         }
 
-        public void setPhEnMp3(String phEnMp3) {
+        public void setPhEnMp3(final String phEnMp3) {
             this.phEnMp3 = phEnMp3;
         }
 
         public String getPhAmMp3() {
-            return phAmMp3;
+            return this.phAmMp3;
         }
 
-        public void setPhAmMp3(String phAmMp3) {
+        public void setPhAmMp3(final String phAmMp3) {
             this.phAmMp3 = phAmMp3;
         }
 
         public String getPhTtsMp3() {
-            return phTtsMp3;
+            return this.phTtsMp3;
         }
 
-        public void setPhTtsMp3(String phTtsMp3) {
+        public void setPhTtsMp3(final String phTtsMp3) {
             this.phTtsMp3 = phTtsMp3;
         }
 
         public List<String> getWordMean() {
-            return wordMean;
+            return this.wordMean;
         }
 
-        public void setWordMean(List<String> wordMean) {
+        public void setWordMean(final List<String> wordMean) {
             this.wordMean = wordMean;
         }
     }
 
     public int getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(final int status) {
@@ -112,7 +118,7 @@ public class KingSoftBean {
     }
 
     public ContentBean getContent() {
-        return content;
+        return this.content;
     }
 
     public void setContent(final ContentBean content) {
