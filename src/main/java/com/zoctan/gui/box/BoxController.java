@@ -18,8 +18,8 @@ class BoxController extends AbstractController {
 
     @Override
     public String translate(String query) {
-        if (query == null) {
-            return null;
+        if (query == null || "".equals(query)) {
+            return "请输入要查询的词";
         }
         // 谷歌支持段落翻译，可以将换行符去除
         // 其他API不支持段落翻译，会造成无翻译结果

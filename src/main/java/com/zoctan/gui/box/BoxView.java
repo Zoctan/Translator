@@ -1,12 +1,20 @@
 package com.zoctan.gui.box;
 
 import com.zoctan.gui.AbstractController;
+import com.zoctan.utils.Tess4jUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * 箱布局
@@ -137,9 +145,9 @@ public class BoxView extends JFrame {
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 
         // 下拉框
-        final JComboBox<String> comboBox;
         // 显示选项为API的名称
-        comboBox = new JComboBox<>(this.controller.getApis());
+        final JComboBox<String> comboBox = new JComboBox<>(this.controller.getApis());
+        comboBox.setBackground(Color.WHITE);
         // 切换选项时更改API
         comboBox.addItemListener(itemEvent -> {
             final String selectedItem = itemEvent.getItem().toString();
@@ -148,45 +156,89 @@ public class BoxView extends JFrame {
 
         // OCR选项
         final Checkbox ocrCheckbox = new Checkbox("OCR");
-        final Runnable runnable = () -> {
-            while (true) {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.println("(" + MouseInfo.getPointerInfo().getLocation().x +
-                            ", " +
-                            MouseInfo.getPointerInfo().getLocation().y + ")");
-                } catch (final InterruptedException e) {
-                    return;
-                }
-            }
-        };
-        final Thread thread = new Thread(runnable);
+        SwingWorker[] aSwingWork = new SwingWorker[1];
         ocrCheckbox.addItemListener(event -> {
-            // fixme
-            // 后台线程获取鼠标坐标
-            // 开启和恢复存在问题
+            if (aSwingWork[0] == null) {
+                aSwingWork[0] = new SwingWorker<Void, Integer>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        while (true) {
+                            int mouseX1 = MouseInfo.getPointerInfo().getLocation().x;
+                            int mouseY1 = MouseInfo.getPointerInfo().getLocation().y;
+                            try {
+                                TimeUnit.SECONDS.sleep(1);
+
+                                int mouseX2 = MouseInfo.getPointerInfo().getLocation().x;
+                                int mouseY2 = MouseInfo.getPointerInfo().getLocation().y;
+
+                                if (mouseX1 == mouseX2 && mouseY1 == mouseY2) {
+                                    System.out.println("(" + mouseX1 + ", " + mouseY1 + ")");
+
+                                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                                    Rectangle screenRectangle = new Rectangle(screenSize);
+                                    Robot robot = new Robot();
+                                    BufferedImage image = robot.createScreenCapture(screenRectangle);
+                                    // 截图保存的路径
+                                    File screenFile = new File("/tmp/aaa"); // 如果文件夹路径不存在，则创建
+                                    if (!screenFile.getParentFile().exists()) {
+                                        screenFile.getParentFile().mkdirs();
+                                    }
+
+                                    // 指定屏幕区域，参数为截图左上角坐标(0,0)+右下角坐标=鼠标坐标
+                                    BufferedImage subimage = image.getSubimage(0, 0, mouseX1, mouseY1);
+
+                                    ImageIO.write(subimage, "png", screenFile);
+                                    Tess4jUtils tess4jUtils = new Tess4jUtils();
+                                    System.out.println(tess4jUtils.readChar(subimage));
+                                }
+                            } catch (final InterruptedException e) {
+                                return null;
+                            }
+                        }
+                    }
+                };
+            }
             if (ocrCheckbox.getState()) {
-                thread.start();
+                aSwingWork[0].execute();
             } else {
-                thread.interrupt();
+                aSwingWork[0].cancel(true);
+                aSwingWork[0] = null;
             }
         });
 
         // 翻译按钮
-        final JButton translateButton = new JButton("translate");
+        String translate = "translate";
+        String waiting = "waiting...";
+        final JButton translateButton = new JButton(translate);
+        translateButton.setBackground(Color.WHITE);
         translateButton.addActionListener(event -> {
-            final String query = this.textAreas[0].getText();
-            final String response = this.controller.translate(query);
-            this.textAreas[1].setText(response);
+            SwingWorker syncTranslate = new SwingWorker<Void, Integer>() {
+                @Override
+                protected Void doInBackground() {
+                    translateButton.setText(waiting);
+                    final String query = textAreas[0].getText();
+                    final String response = controller.translate(query);
+                    textAreas[1].setText(response);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    translateButton.setText(translate);
+                }
+            };
+            syncTranslate.execute();
         });
 
         // 粘贴按钮
         final JButton pasteButton = new JButton("↑paste");
+        pasteButton.setBackground(Color.WHITE);
         // 将剪切板内容复制到待翻译输入框
         pasteButton.addActionListener(event -> this.textAreas[0].paste());
 
         // 复制按钮
         final JButton copyButton = new JButton("↓copy");
+        copyButton.setBackground(Color.WHITE);
         // 将翻译后的内容复制到剪切板
         copyButton.addActionListener(event -> {
             final String tempText = this.textAreas[1].getText();
@@ -196,6 +248,7 @@ public class BoxView extends JFrame {
 
         // 清除按钮
         final JButton clearButton = new JButton("↑↓clear");
+        clearButton.setBackground(Color.WHITE);
         // 将输入框内容都清空
         clearButton.addActionListener(event -> {
             for (final JTextArea textArea : this.textAreas) {

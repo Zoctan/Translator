@@ -4,6 +4,7 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ import java.util.Objects;
  */
 public class Tess4jUtils {
 
-    public static void main(final String[] args) throws NullPointerException {
+    public static void main(final String[] args) throws Exception {
         final Tess4jUtils tess4jUtils = new Tess4jUtils();
         // 遍历/image/目录下的图片并识别
         final File imageDir = new File(Tess4jUtils.class.getResource("/image/").getPath());
@@ -32,47 +33,32 @@ public class Tess4jUtils {
     /**
      * 从图片中提取文字
      *
-     * @param path 图片路径
+     * @param image 图片
      * @return 图片中文字
      */
-    public String readChar(final String path) {
-        final ITesseract instance = new Tesseract();
-        final File imageFile = new File(path);
-        return this.getOCRText(instance, imageFile);
+    public String readChar(final BufferedImage image) throws TesseractException {
+        final ITesseract instance = getInstance();
+        return instance.doOCR(image);
     }
 
     /**
      * 从图片中提取文字
      *
-     * @param path     图片路径
-     * @param dataPath 训练库路径
-     * @param language 语言字库
+     * @param imagePath 图片路径
      * @return 图片中文字
      */
-    public String readChar(final String path, final String dataPath, final String language) {
-        final File imageFile = new File(path);
-        final ITesseract instance = new Tesseract();
-        instance.setDatapath(dataPath);
-        instance.setLanguage(language);
-        return this.getOCRText(instance, imageFile);
+    public String readChar(final String imagePath) throws TesseractException {
+        final ITesseract instance = getInstance();
+        final File imageFile = new File(imagePath);
+        return instance.doOCR(imageFile);
     }
 
-    /**
-     * 识别图片文件中的文字
-     *
-     * @param instance  Tesseract实例
-     * @param imageFile 图片文件
-     * @return 图片中文字
-     */
-    private String getOCRText(final ITesseract instance, final File imageFile) {
-        String result = null;
+    private ITesseract getInstance() {
+        final ITesseract instance = new Tesseract();
         // 使用/tessdata目录下的训练库
         instance.setDatapath(this.getClass().getResource("/tessdata").getPath());
-        try {
-            result = instance.doOCR(imageFile);
-        } catch (final TesseractException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return instance;
+
     }
+
 }

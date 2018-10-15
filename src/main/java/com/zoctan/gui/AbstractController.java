@@ -37,6 +37,12 @@ public abstract class AbstractController {
         this.currentApi = this.apiFactory.get(this.apis[0]);
     }
 
+    /**
+     * 翻译
+     *
+     * @param query 待查词
+     * @return 译后词
+     */
     abstract public String translate(String query);
 
     public JFrame getFrame() {
