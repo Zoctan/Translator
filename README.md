@@ -8,6 +8,15 @@ Java 实现的翻译器，支持 OCR 屏幕取词
 
 ## 说明
 
+**运行前提**
+
+OCR 功能需要安装：
+tesseract
+tesseract-data-chi_sim
+tesseract-data-eng
+
+> 作者运行环境为 Linux，其他环境尚未测试
+
 **取词功能实现**
 
 1. 鼠标截取屏幕区域图片
