@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ApiComponent {
-    /**
-     * API名称
-     */
-    String name();
+  /**
+   * API名称
+   */
+  String name();
 }

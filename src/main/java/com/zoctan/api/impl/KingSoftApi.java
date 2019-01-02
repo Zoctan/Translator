@@ -18,32 +18,32 @@ import java.util.Map;
  */
 @ApiComponent(name = "KingSoft")
 public class KingSoftApi extends AbstractApi {
-    private static final String API_URL = "http://fy.iciba.com/ajax.php?a=fy";
+  private static final String API_URL = "http://fy.iciba.com/ajax.php?a=fy";
 
-    @Override
-    protected String getResult(final String response) {
-        return JSON.parseObject(response, KingSoftBean.class).toString();
+  @Override
+  protected String getResult(final String response) {
+    return JSON.parseObject(response, KingSoftBean.class).toString();
+  }
+
+  @Override
+  protected String request(final String query) {
+    final Map<String, String> params = this.buildParams(query);
+    return Requests.post(API_URL).body(params).send().readToText();
+  }
+
+  @Override
+  protected Map<String, String> buildParams(final String query) {
+    String from = "en";
+    String to = "zh";
+    if (RegexUtils.containsChinese(query)) {
+      from = "zh";
+      to = "en";
     }
 
-    @Override
-    protected String request(final String query) {
-        final Map<String, String> params = this.buildParams(query);
-        return Requests.post(API_URL).body(params).send().readToText();
-    }
-
-    @Override
-    protected Map<String, String> buildParams(final String query) {
-        String from = "en";
-        String to = "zh";
-        if (RegexUtils.containsChinese(query)) {
-            from = "zh";
-            to = "en";
-        }
-
-        final Map<String, String> params = new HashMap<>(3);
-        params.put("f", from);
-        params.put("t", to);
-        params.put("w", query);
-        return params;
-    }
+    final Map<String, String> params = new HashMap<>(3);
+    params.put("f", from);
+    params.put("t", to);
+    params.put("w", query);
+    return params;
+  }
 }

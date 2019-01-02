@@ -15,174 +15,173 @@ import java.util.stream.Stream;
  * @date 2018/06/29
  */
 public class YoudaoBean {
+  /**
+   * 错误返回码	一定存在
+   */
+  private Integer errorCode;
+  /**
+   * 源语言 查询正确时一定存在
+   */
+  private String query;
+  /**
+   * 翻译结果 查询正确时一定存在
+   */
+  private List<String> translation;
+  /**
+   * 词义 基本词典,查词时才有
+   */
+  private BasicBean basic;
+  /**
+   * 翻译结果发音地址 翻译成功一定存在
+   */
+  private String tSpeakUrl;
+  /**
+   * 源语言发音地址 翻译成功一定存在
+   */
+  private String speakUrl;
+
+  @Override
+  public String toString() {
+    try {
+      final String translation = this.getTranslation().stream()
+          .collect(Collectors.joining(" ", "翻译：", "\n"));
+
+      final String phonetic = Stream.of(this.getBasic().getPhonetic())
+          .filter(Objects::nonNull)
+          .collect(Collectors.joining(" ", "音标：", "\n"));
+
+      final String explains = this.getBasic().getExplains().stream()
+          .collect(Collectors.joining("\n", "词义：\n", ""));
+      return translation + phonetic + explains;
+    } catch (final NullPointerException ignored) {
+      return "无法找到该单词哦";
+    }
+  }
+
+  public Integer getErrorCode() {
+    return this.errorCode;
+  }
+
+  public void setErrorCode(final Integer errorCode) {
+    this.errorCode = errorCode;
+  }
+
+  public String getQuery() {
+    return this.query;
+  }
+
+  public void setQuery(final String query) {
+    this.query = query;
+  }
+
+  public List<String> getTranslation() {
+    return this.translation;
+  }
+
+  public void setTranslation(final List<String> translation) {
+    this.translation = translation;
+  }
+
+  public BasicBean getBasic() {
+    return this.basic;
+  }
+
+  public void setBasic(final BasicBean basic) {
+    this.basic = basic;
+  }
+
+  public String gettSpeakUrl() {
+    return this.tSpeakUrl;
+  }
+
+  public void settSpeakUrl(final String tSpeakUrl) {
+    this.tSpeakUrl = tSpeakUrl;
+  }
+
+  public String getSpeakUrl() {
+    return this.speakUrl;
+  }
+
+  public void setSpeakUrl(final String speakUrl) {
+    this.speakUrl = speakUrl;
+  }
+
+  public static class BasicBean {
     /**
-     * 错误返回码	一定存在
+     * 默认音标，默认是英式音标，英文查词成功，一定存在
      */
-    private Integer errorCode;
+    private String phonetic;
     /**
-     * 源语言 查询正确时一定存在
+     * 美式音标，英文查词成功，一定存在
      */
-    private String query;
+    @JSONField(name = "us-phonetic")
+    private String usPhonetic;
     /**
-     * 翻译结果 查询正确时一定存在
+     * 英式音标，英文查词成功，一定存在
      */
-    private List<String> translation;
+    @JSONField(name = "uk-phonetic")
+    private String ukPhonetic;
     /**
-     * 词义 基本词典,查词时才有
+     * 英式发音，英文查词成功，一定存在
      */
-    private BasicBean basic;
+    @JSONField(name = "uk-speech")
+    private String ukSpeech;
     /**
-     * 翻译结果发音地址 翻译成功一定存在
+     * 美式发音，英文查词成功，一定存在
      */
-    private String tSpeakUrl;
+    @JSONField(name = "us-speech")
+    private String usSpeech;
     /**
-     * 源语言发音地址 翻译成功一定存在
+     * 基本释义
      */
-    private String speakUrl;
+    private List<String> explains;
 
-    @Override
-    public String toString() {
-        try {
-            final String translation = this.getTranslation().stream()
-                    .collect(Collectors.joining(" ", "翻译：", "\n"));
-
-            final String phonetic = Stream.of(this.getBasic().getPhonetic())
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.joining(" ", "音标：", "\n"));
-
-            final String explains = this.getBasic().getExplains().stream()
-                    .collect(Collectors.joining("\n", "词义：\n", ""));
-            return translation + phonetic + explains;
-        } catch (final NullPointerException ignored) {
-            return "无法找到该单词哦";
-        }
+    public String getPhonetic() {
+      return this.phonetic;
     }
 
-    public static class BasicBean {
-        /**
-         * 默认音标，默认是英式音标，英文查词成功，一定存在
-         */
-        private String phonetic;
-        /**
-         * 美式音标，英文查词成功，一定存在
-         */
-        @JSONField(name = "us-phonetic")
-        private String usPhonetic;
-        /**
-         * 英式音标，英文查词成功，一定存在
-         */
-        @JSONField(name = "uk-phonetic")
-        private String ukPhonetic;
-        /**
-         * 英式发音，英文查词成功，一定存在
-         */
-        @JSONField(name = "uk-speech")
-        private String ukSpeech;
-        /**
-         * 美式发音，英文查词成功，一定存在
-         */
-        @JSONField(name = "us-speech")
-        private String usSpeech;
-        /**
-         * 基本释义
-         */
-        private List<String> explains;
-
-        public String getPhonetic() {
-            return this.phonetic;
-        }
-
-        public void setPhonetic(final String phonetic) {
-            this.phonetic = phonetic;
-        }
-
-        public List<String> getExplains() {
-            return this.explains;
-        }
-
-        public void setExplains(final List<String> explains) {
-            this.explains = explains;
-        }
-
-        public String getUsPhonetic() {
-            return this.usPhonetic;
-        }
-
-        public void setUsPhonetic(final String usPhonetic) {
-            this.usPhonetic = usPhonetic;
-        }
-
-        public String getUkPhonetic() {
-            return this.ukPhonetic;
-        }
-
-        public void setUkPhonetic(final String ukPhonetic) {
-            this.ukPhonetic = ukPhonetic;
-        }
-
-        public String getUkSpeech() {
-            return this.ukSpeech;
-        }
-
-        public void setUkSpeech(final String ukSpeech) {
-            this.ukSpeech = ukSpeech;
-        }
-
-        public String getUsSpeech() {
-            return this.usSpeech;
-        }
-
-        public void setUsSpeech(final String usSpeech) {
-            this.usSpeech = usSpeech;
-        }
+    public void setPhonetic(final String phonetic) {
+      this.phonetic = phonetic;
     }
 
-
-    public Integer getErrorCode() {
-        return this.errorCode;
+    public List<String> getExplains() {
+      return this.explains;
     }
 
-    public void setErrorCode(final Integer errorCode) {
-        this.errorCode = errorCode;
+    public void setExplains(final List<String> explains) {
+      this.explains = explains;
     }
 
-    public String getQuery() {
-        return this.query;
+    public String getUsPhonetic() {
+      return this.usPhonetic;
     }
 
-    public void setQuery(final String query) {
-        this.query = query;
+    public void setUsPhonetic(final String usPhonetic) {
+      this.usPhonetic = usPhonetic;
     }
 
-    public List<String> getTranslation() {
-        return this.translation;
+    public String getUkPhonetic() {
+      return this.ukPhonetic;
     }
 
-    public void setTranslation(final List<String> translation) {
-        this.translation = translation;
+    public void setUkPhonetic(final String ukPhonetic) {
+      this.ukPhonetic = ukPhonetic;
     }
 
-    public BasicBean getBasic() {
-        return this.basic;
+    public String getUkSpeech() {
+      return this.ukSpeech;
     }
 
-    public void setBasic(final BasicBean basic) {
-        this.basic = basic;
+    public void setUkSpeech(final String ukSpeech) {
+      this.ukSpeech = ukSpeech;
     }
 
-    public String gettSpeakUrl() {
-        return this.tSpeakUrl;
+    public String getUsSpeech() {
+      return this.usSpeech;
     }
 
-    public void settSpeakUrl(final String tSpeakUrl) {
-        this.tSpeakUrl = tSpeakUrl;
+    public void setUsSpeech(final String usSpeech) {
+      this.usSpeech = usSpeech;
     }
-
-    public String getSpeakUrl() {
-        return this.speakUrl;
-    }
-
-    public void setSpeakUrl(final String speakUrl) {
-        this.speakUrl = speakUrl;
-    }
+  }
 }

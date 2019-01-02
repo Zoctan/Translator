@@ -1,28 +1,20 @@
 # Translator
 
-Java 实现的翻译器，支持 OCR 屏幕取词（暂未实现）
+Java 实现的翻译器，支持 OCR 屏幕取词
 
 ![1](https://github.com/Zoctan/Translator/blob/master/README/1.png)
 
 ![2](https://github.com/Zoctan/Translator/blob/master/README/2.png)
 
-![3](https://github.com/Zoctan/Translator/blob/master/README/3.png)
-
-![4](https://github.com/Zoctan/Translator/blob/master/README/4.png)
-
 ## 说明
 
-**功能**
+**取词功能实现**
 
-OCR 取词暂时不打算填坑。
+1. 鼠标截取屏幕区域图片
+2. OCR 识别图片
+3. 翻译获取的图片文字
 
-鼠标取词（简易）：
-1. 截整个屏幕图片
-2. 获取鼠标的屏幕位置
-3. 剪裁鼠标位置左上角图
-4. OCR 识别图片，获得最后出现的一个单词
-
-屏幕划词，和上面的鼠标取词类似。
+> 鼠标左键拖拽取词，右键退出
 
 **API 扩展**
 
@@ -42,6 +34,8 @@ OCR 取词暂时不打算填坑。
 
 ## 更新日志
 
-2018.5.25 增加注释、日志模块
+2019.01.02 OCR 识别完成。
 
-2018.3.24 基本功能已完成。
+2018.05.25 增加注释、日志模块。
+
+2018.03.24 基本功能已完成。

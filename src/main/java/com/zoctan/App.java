@@ -9,7 +9,7 @@ import com.zoctan.gui.box.BoxView;
  * @date 2018/06/29
  */
 public class App {
-    public static void main(final String[] args) {
-        new BoxView("Translator");
-    }
+  public static void main(final String[] args) {
+    new BoxView("Translator");
+  }
 }
