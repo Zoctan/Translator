@@ -2,15 +2,17 @@ package com.zoctan.gui.box;
 
 import com.zoctan.gui.AbstractController;
 import com.zoctan.gui.AbstractFrame;
-import com.zoctan.utils.FileUtils;
 import com.zoctan.utils.ScreenShotUtils;
 import com.zoctan.utils.Tess4jUtils;
 import net.sourceforge.tess4j.TesseractException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
 
 /**
  * 箱布局
@@ -19,6 +21,7 @@ import java.awt.datatransfer.StringSelection;
  * @date 2018/06/29
  */
 public class BoxView extends AbstractFrame {
+  private static final Logger log = LoggerFactory.getLogger("BoxView");
   /**
    * 窗体宽和高
    */
@@ -41,10 +44,6 @@ public class BoxView extends AbstractFrame {
    * 绑定控制器
    */
   private final AbstractController controller = new BoxController(this);
-  /**
-   * OCR图片地址
-   */
-  private final String imagePath = "/tmp/1.jpg";
 
   public BoxView(final String title) {
     // 设置窗体标题
@@ -138,16 +137,16 @@ public class BoxView extends AbstractFrame {
   }
 
   @Override
-  public void screenShotCallback() {
-    final Tess4jUtils tess4jUtils = new Tess4jUtils();
+  public void screenShotCallback(final BufferedImage image) {
     try {
-      final String query = tess4jUtils.readChar(imagePath);
+      final String query = Tess4jUtils.readChar(image);
       final String response = controller.translate(query);
       textAreas[0].setText(query);
       textAreas[1].setText(response);
-      FileUtils.delete(imagePath);
     } catch (final TesseractException e) {
       e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      JOptionPane.showMessageDialog(null, e.toString(), "Error Message", JOptionPane.ERROR_MESSAGE);
     }
   }
 
@@ -172,9 +171,8 @@ public class BoxView extends AbstractFrame {
     final JButton ocrButton = new JButton("OCR");
     ocrButton.setBackground(Color.WHITE);
     ocrButton.addActionListener(event -> {
-      FileUtils.delete(imagePath);
       // 截屏
-      final ScreenShotUtils shotUtils = new ScreenShotUtils(this, imagePath);
+      final ScreenShotUtils shotUtils = new ScreenShotUtils(this);
       shotUtils.shot();
     });
 

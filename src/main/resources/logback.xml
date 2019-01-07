@@ -9,8 +9,7 @@
     <!-- 动态日志级别 -->
     <jmxConfigurator/>
     <!-- 定义日志文件 输出位置 -->
-    <!-- <property name="log_dir" value="C:/test" />-->
-    <property name="log_dir" value="E:/tmp"/>
+    <property name="log_dir" value="/log"/>
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
 

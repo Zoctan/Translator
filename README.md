@@ -8,14 +8,21 @@ Java 实现的翻译器，支持 OCR 屏幕取词
 
 ## 说明
 
+> 在 IDE 中可以正常运行 OCR，但打包成 jar 后 OCR 出现问题，暂时未找到解决方法，欢迎在 issue 中提出解决方案 :)
+
 **运行前提**
 
 OCR 功能需要安装：
-tesseract
-tesseract-data-chi_sim
-tesseract-data-eng
 
-> 作者运行环境为 Linux，其他环境尚未测试
+```
+tesseract
+
+tesseract-data-chi_sim
+
+tesseract-data-eng
+```
+
+> 关于 Tesseract 请参考 Github：https://github.com/tesseract-ocr/tesseract/wiki
 
 **取词功能实现**
 
@@ -31,15 +38,11 @@ tesseract-data-eng
 
 目前只有谷歌的接口支持段落翻译，其他的只能单词翻译，而且有道翻译需要申请 key。
 
-**将工程转换为 maven 工程**
+**将工程转换为 Maven 工程**
 
 在 pom.xml 文件上右键，选择 "Add as Maven Project"：
 
 ![maven](https://github.com/Zoctan/Translator/blob/master/README/maven.png)
-
-**其他**
-
-由于 jar 打包后有点大，所以暂时不提供 jar 文件，需自行打包。
 
 ## 更新日志
 
